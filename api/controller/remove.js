@@ -1,5 +1,6 @@
 const usersDB = require("../model/users");
 
+// delete a record
 exports.delete_remove = (req, res, next) => {
   usersDB
   .deleteOne({ _id : req.body._id })

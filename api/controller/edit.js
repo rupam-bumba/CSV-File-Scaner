@@ -1,7 +1,7 @@
 const usersDB = require("../model/users");
 
 exports.put_edit = (req, res, next) => {
- 
+  //  update record
   usersDB
     .findOneAndUpdate(
       { _id: req.body._id },
@@ -26,5 +26,4 @@ exports.put_edit = (req, res, next) => {
     .catch((error) => {
       return next(error);
     });
-
-  };
+};

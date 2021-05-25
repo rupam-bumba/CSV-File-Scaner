@@ -3,10 +3,6 @@ const router = express.Router();
 const middleware = require("../middleware")
 
 
-// POST _sample
-const _sample = require("../controller/_sample");
-router.post("/sample",middleware, _sample.post_sample);
-
 // POST uploadcsv
 const uploadcsv = require("../controller/uploadcsv");
 router.post("/uploadcsv",middleware, uploadcsv.post_uploadcsv);

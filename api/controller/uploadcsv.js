@@ -2,9 +2,9 @@ const usersDB = require("../model/users");
 const multer = require("multer");
 var csvparse = require("csv-parse");
 var fs = require("fs");
-
 var pramarray = [];
 
+// storage engin
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "././uploads");
@@ -14,11 +14,11 @@ var storage = multer.diskStorage({
   },
 });
 
+// upload funtion
 var upload = multer({ storage: storage }).single("csvfile");
 
 exports.post_uploadcsv = (req, res, next) => {
-  // console.log(req);
-
+  //calling upload funtion
   upload(req, res, (err) => {
     console.log(req.file);
 
@@ -31,22 +31,12 @@ exports.post_uploadcsv = (req, res, next) => {
         err,
       });
     } else {
+      //hold file in buffer
       fs.createReadStream(req.file.path)
-        .pipe(csvparse({ delimiter: ";" }))
+        .pipe(csvparse({ delimiter: ";" })) // csv format
         .on("data", function (csvrow) {
           console.log(csvrow);
-
-          // console.log("----------------");
-          // console.log(csvrow[0]);
-          // console.log(csvrow[1]);
-          // console.log(csvrow[2]);
-          // console.log(csvrow[3]);
-          // console.log(csvrow[4]);
-          // console.log(csvrow[5]);
-          // console.log(csvrow[6]);
-          // console.log(csvrow[7]);
-          // console.log("----------------");
-
+          // keeping record in a object
           let va = {
             Login_email: csvrow[0],
             Identifier: csvrow[1],
@@ -59,21 +49,21 @@ exports.post_uploadcsv = (req, res, next) => {
           };
           console.log(va);
           pramarray.push(va);
-          console.log("----------------------");
           console.log(pramarray);
 
+          // inserting record in database
           usersDB
-          .insertMany(pramarray)
-          .then((result) => {
-            res.status(400).json({
-              result,
+            .insertMany(pramarray)
+            .then((result) => {
+              res.status(400).json({
+                result,
+              });
+            })
+            .catch((error) => {
+              res.status(400).json({
+                error,
+              });
             });
-          })
-          .catch((error) => {
-            res.status(400).json({
-              error,
-            });
-          });
         });
     }
   });

@@ -1,7 +1,7 @@
 const usersDB = require("../model/users");
 
 exports.post_create = (req, res, next) => {
-  
+  // create a object
   var users = new usersDB({
     _id: mongoose.Types.ObjectId(),
     Login_email: req.body.Login_email,
@@ -13,7 +13,7 @@ exports.post_create = (req, res, next) => {
     Department: req.body.Department,
     Location: req.body.Location,
   });
-
+  // storeing values in db
   users
     .save()
     .then((result) => {
